@@ -8,12 +8,15 @@ import {
 } from "react-router-dom";
 
 import AllUsers from './home';
+import Register from './Register';
+
 
  function AnotherCom() {
     return (
       <Router>
           <Switch>
             <Route path="/" exact component={AllUsers} />
+            <Route path="/register" exact component={Register} />
           </Switch>
       </Router>
     );
