@@ -3,28 +3,38 @@ import ReactDOM from 'react-dom';
 import { Container, Header , Input, Button } from 'semantic-ui-react'
 import { useMutation, gql } from '@apollo/client';
 
-
-
-
  function Register() {
-
 
     const registerUser = gql`
         mutation register($name: String,$email: String,$password: String) {
-            register(name: $name, email: $email,password: $password) 
+            register(name: $name, email: $email,password: $password) {
+                ok
+                errors {
+                    path
+                    message
+                }
+            }
         }
     `;
 
- const [register, { data }] = useMutation(registerUser);
-
-
+    const [register] = useMutation(registerUser);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
    const onSubmit = async () => {
-      const res =  await register({ variables: { name: name, email: email, password: password } });
-      console.log(res.data)
+       try {
+        const res = await register({ variables: { name: name, email: email, password: password } }); 
+        const errors  = res.data.register.errors
+        if (errors) {
+            alert(errors[0].message)
+        } else {
+            alert("register done susscessfully")
+        }
+        // console.log(` the result ${ JSON.stringify(res.data.register.errors)}`)
+       } catch {
+        alert( ` Error >>>  please try again some thing went wrong`)
+       }
     }
 
     return (
@@ -36,7 +46,6 @@ import { useMutation, gql } from '@apollo/client';
                 <Button onClick={ onSubmit }> Submit </Button>            
             </Container>
         )
-    
   }
 
   export default Register
