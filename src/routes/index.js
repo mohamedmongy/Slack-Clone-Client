@@ -9,13 +9,14 @@ import {
 
 import AllUsers from './home';
 import Register from './Register';
-
+import LoginComp from './Login';
 
  function AnotherCom() {
     return (
       <Router>
           <Switch>
             <Route path="/" exact component={AllUsers} />
+            <Route path="/login" exact component={LoginComp} />
             <Route path="/register" exact component={Register} />
           </Switch>
       </Router>

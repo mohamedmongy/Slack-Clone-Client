@@ -1,9 +1,9 @@
 import React , { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { Container, Header , Input, Button } from 'semantic-ui-react'
+import { Container, Header , Input, Button, Message } from 'semantic-ui-react'
 import { useMutation, gql } from '@apollo/client';
 
- function Register() {
+ function Register(props) {
 
     const registerUser = gql`
         mutation register($name: String,$email: String,$password: String) {
@@ -25,25 +25,25 @@ import { useMutation, gql } from '@apollo/client';
    const onSubmit = async () => {
        try {
         const res = await register({ variables: { name: name, email: email, password: password } }); 
-        const errors  = res.data.register.errors
-        if (errors) {
-            alert(errors[0].message)
+        const  { ok , errors} = res.data.register
+        if (ok) {
+            props.history.push('/')
         } else {
-            alert("register done susscessfully")
+            alert(errors[0].message)
         }
         // console.log(` the result ${ JSON.stringify(res.data.register.errors)}`)
        } catch {
-        alert( ` Error >>>  please try again some thing went wrong`)
+        alert( `please try again some thing went wrong`)
        }
     }
 
     return (
             <Container text>
-             <Header as='h2'>Register</Header>
+                <Header as='h2'> Register New Account </Header>
                 <Input onChange={ (e) => { setName(e.target.value) } } value= {name}  placeholder='name' />
                 <Input onChange={ (e) => { setEmail(e.target.value)}} value= {email} placeholder='email' />
                 <Input onChange={ (e) => { setPassword(e.target.value)}} value= {password} type="password" placeholder='password'/>
-                <Button onClick={ onSubmit }> Submit </Button>            
+                <Button onClick={ onSubmit }> Submit </Button>         
             </Container>
         )
   }
